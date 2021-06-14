@@ -33,3 +33,8 @@ jobs:
         run: |
           pip3 install wheel
           python3 setup.py sdist bdist_wheel
+
+      - name: Checks the Documentation Build
+        uses: ammaraskar/sphinx-action@master
+        with:
+          docs-folder: "docs/"

@@ -16,7 +16,7 @@ def install_my_kernel_spec(user=True, prefix=None):
     """
         Installs the Kernel Specification
 
-        Args:
+        Parameters:
             user: Checks the User installation
             prefix: Checks for the specific prefix
     """
