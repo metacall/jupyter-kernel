@@ -21,7 +21,7 @@ class metacall_jupyter(Kernel):
         """
         Executes the User Code
 
-        Args:
+        Parameters:
             code: The code to be executed
             silent: Whether to display output
             store_history:  Whether to record this code in history and increase the execution count
