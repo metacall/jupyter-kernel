@@ -1,23 +1,26 @@
 from ipykernel.kernelbase import Kernel
 
+
 class metacall_jupyter(Kernel):
     """
     Defines the Jupyter Kernel declaration for MetaCall Core
     """
+
     implementation = "Jupyter Kernel for MetaCall Core"
     implementation_version = "0.1"
     language = "MetaCall Core"
     language_version = "0.4.0"
     language_info = {
-        "name" : "MetaCall Core",
-        "mimetype" : "text/plain",
-        "file_extension" : ".txt",
+        "name": "MetaCall Core",
+        "mimetype": "text/plain",
+        "file_extension": ".txt",
     }
 
     banner = "Wrapper Kernel for MetaCall Core Library leveraging IPython and Jupyter"
 
-    def do_execute(self, code, silent, store_history=True,
-                   user_expressions=None, allow_stdin=False):
+    def do_execute(
+        self, code, silent, store_history=True, user_expressions=None, allow_stdin=False
+    ):
         """
         Executes the User Code
 
@@ -51,11 +54,11 @@ class metacall_jupyter(Kernel):
             """
             logger_output = "success"
             stream_content = {"name": "stdout", "text": logger_output}
-            self.send_response(self.iopub_socket, 'stream', stream_content)
+            self.send_response(self.iopub_socket, "stream", stream_content)
 
         return {
-            'status': 'ok',
-            'execution_count': self.execution_count,
-            'payload': [],
-            'user_expressions': {},
-            }
+            "status": "ok",
+            "execution_count": self.execution_count,
+            "payload": [],
+            "user_expressions": {},
+        }

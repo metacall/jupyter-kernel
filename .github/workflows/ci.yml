@@ -38,3 +38,8 @@ jobs:
         uses: ammaraskar/sphinx-action@master
         with:
           docs-folder: "docs/"
+
+      - name: Lint with flake8
+        run: |
+          pip3 install flake8
+          flake8 .
