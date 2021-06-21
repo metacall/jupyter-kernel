@@ -83,6 +83,8 @@ def main(argv=None):
 
     install_my_kernel_spec(user=user, prefix=prefix)
 
+# TODO
+# if __name__ == "__main__":
+#     main()
 
-if __name__ == "__main__":
-    main()
+main()  # noqa: E305

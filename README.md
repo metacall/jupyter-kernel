@@ -25,21 +25,19 @@ source env/bin/activate
 Next we can download all the dependenices and setup the Kernel:
 
 ```sh
-python3 -m pip install --upgrade pip
-python3 setup.py install
-python3 setup.py bdist_wheel
+metacall pip3 install -r requirements.txt
 ```
 
 You can install the Kernel by pushing the following command:
 
 ```sh
-python3 -m metacall_jupyter.install
+metacall metacall_jupyter/install.py
 ```
 
 Start your Jupyter Notebook by pushing the following command:
 
 ```sh
-jupyter notebook
+metacall metacall_jupyter/launcher.py
 ```
 
 You can pick `metacall_jupyter` from the drop-down options and start working with the Jupyter Notebook interface.
