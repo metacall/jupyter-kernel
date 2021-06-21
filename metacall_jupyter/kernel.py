@@ -1,4 +1,5 @@
 from ipykernel.kernelbase import Kernel
+from metacall import metacall_load_from_memory
 
 
 class metacall_jupyter(Kernel):
@@ -9,7 +10,7 @@ class metacall_jupyter(Kernel):
     implementation = "Jupyter Kernel for MetaCall Core"
     implementation_version = "0.1"
     language = "MetaCall Core"
-    language_version = "0.4.0"
+    language_version = "0.4.12"
     language_info = {
         "name": "MetaCall Core",
         "mimetype": "text/plain",
@@ -52,7 +53,9 @@ class metacall_jupyter(Kernel):
             load files to the MetaCall, execute them and ensure that the language mixing
             process happens clearly.
             """
-            logger_output = "success"
+
+            cp = metacall_load_from_memory("node", code)
+            logger_output = cp
             stream_content = {"name": "stdout", "text": logger_output}
             self.send_response(self.iopub_socket, "stream", stream_content)
 
