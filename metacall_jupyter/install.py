@@ -31,7 +31,6 @@ def install_my_kernel_spec(user=True, prefix=None):
             temporary_directory,
             "metacall_jupyter",
             user=user,
-            replace=True,
             prefix=prefix,
         )
 
@@ -83,8 +82,5 @@ def main(argv=None):
 
     install_my_kernel_spec(user=user, prefix=prefix)
 
-# TODO
-# if __name__ == "__main__":
-#     main()
-
-main()  # noqa: E305
+if __name__ == "__main__":
+    main()

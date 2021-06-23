@@ -1,6 +1,8 @@
 from ipykernel.kernelbase import Kernel
-from metacall import metacall_load_from_memory
-
+import tempfile
+import subprocess
+import nest_asyncio
+nest_asyncio.apply()
 
 class metacall_jupyter(Kernel):
     """
@@ -54,9 +56,21 @@ class metacall_jupyter(Kernel):
             process happens clearly.
             """
 
-            cp = metacall_load_from_memory("node", code)
-            logger_output = cp
-            stream_content = {"name": "stdout", "text": logger_output}
+            # TODO: Implement the proper suffix depending on the language
+            temp = tempfile.NamedTemporaryFile(suffix='.js')
+            try:
+                temp.write(code.encode())
+                result = subprocess.run(['metacall', str(temp.name)], stdout=subprocess.PIPE)
+                logger_output = result.stdout.decode('utf-8')
+            except Exception as e:
+                logger_output = str(e)
+            finally:
+                temp.close()
+
+            def remove_last_line_of_string(s):
+                return s[:s.rfind('\n')]
+
+            stream_content = {"name": "stdout", "text": remove_last_line_of_string(logger_output)}
             self.send_response(self.iopub_socket, "stream", stream_content)
 
         return {

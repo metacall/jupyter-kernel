@@ -25,22 +25,31 @@ source env/bin/activate
 Next we can download all the dependenices and setup the Kernel:
 
 ```sh
-metacall pip3 install -r requirements.txt
-```
-
-You can install the Kernel by pushing the following command:
-
-```sh
-metacall metacall_jupyter/install.py
+python3 -m pip install --upgrade pip
+pip3 install -r requirements.txt
+python3 setup.py install
+python3 -m metacall_jupyter.install
 ```
 
 Start your Jupyter Notebook by pushing the following command:
 
 ```sh
-metacall metacall_jupyter/launcher.py
+python3 -m metacall_jupyter.launcher
 ```
 
 You can pick `metacall_jupyter` from the drop-down options and start working with the Jupyter Notebook interface.
+
+## Docker
+
+Build the image:
+```sh
+docker build -t metacall/jupyter .
+```
+
+Run the image:
+```sh
+docker run --rm --network=host -it metacall/jupyter
+```
 
 ## Contributing
 
