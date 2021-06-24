@@ -2,15 +2,15 @@
 
 ![image](assets/project-banner.gif)
 
-![Python CI build](https://github.com/metacall/jupyter-kernel/actions/workflows/ci.yml/badge.svg) [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+![Python CI build](https://github.com/metacall/jupyter-kernel/actions/workflows/ci.yml/badge.svg) [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/metacall/jupyter-kernel/master?filepath=examples)
 
 ## Introduction
 
-This project aims to create a kernel where the MetaCall Core can be loaded and launched through a Jupyter Notebook interface. With this Notebook, the users can try out writing and embedding code in different programming languages.
+This project aims to create a kernel where the MetaCall Core can be loaded and launched through a Jupyter Notebook interface. With this kernel, users can try out writing code in different programming languages within the same notebook.
 
-It would also make it possible to use the MetaCall API and achieve the goal of bringing a unified interface for developers to try out and leverage MetaCall. The Kernel would allow developers to load the MetaCall API to execute code in different programming languages by mixing code amongst each other.
+Run an example or write your own code on the web clicking on the `launch binder` badge above.
 
-Check out the [Google Summer of Code Project](https://summerofcode.withgoogle.com/projects/#5883852846792704) to be developed by [Harsh Bardhan Mishra](github.com/harshcasper) under the mentorship of [Gil Arasa Verge](github.com/giarve).
+Check out the [Google Summer of Code Project](https://summerofcode.withgoogle.com/projects/#5883852846792704) description to be developed by [Harsh Bardhan Mishra](https://github.com/harshcasper) under the mentorship of [Gil Arasa Verge](https://github.com/giarve).
 
 ## Installation
 
