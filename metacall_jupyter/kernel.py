@@ -1,8 +1,10 @@
-from ipykernel.kernelbase import Kernel
-import tempfile
 import subprocess
+import tempfile
 import nest_asyncio
+from ipykernel.kernelbase import Kernel
+
 nest_asyncio.apply()
+
 
 class metacall_jupyter(Kernel):
     """
@@ -38,39 +40,38 @@ class metacall_jupyter(Kernel):
             send_response: Sends the execution result
         """
         if not silent:
-            """
-            TODO:
-
-            This is the initial skeleton right here. The next step here would be to
-            directly run a subprocess to load a Python script from a Jupyter UI and
-            execute it using MetaCall. Right now, I have ran into a problem with the
-            MetaCall installation which I would be hopefully fixing using Docker to
-            ensure that the skeleton can atleast take up a Python script from the
-            Jupyter UI and execute it with a rich logger output.
-
-            The next steps would be simple: I will make use of Python magics to ask the
-            user to specify filenames for each script they load in a functional way. The
-            kernel would save them as files and further execute them by loading them. This
-            would pave way for a plug-gable architecture where we can rely on scripting to
-            load files to the MetaCall, execute them and ensure that the language mixing
-            process happens clearly.
-            """
-
-            # TODO: Implement the proper suffix depending on the language
-            temp = tempfile.NamedTemporaryFile(suffix='.js')
             try:
-                temp.write(code.encode())
-                result = subprocess.run(['metacall', str(temp.name)], stdout=subprocess.PIPE)
-                logger_output = result.stdout.decode('utf-8')
+                with tempfile.NamedTemporaryFile(suffix=".js") as temp:
+                    temp.write(code.encode())
+                    temp.flush()
+                    result = subprocess.Popen(
+                        ["metacall", str(temp.name)],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                    )
+                    stdout_value, stderr_value = result.communicate()
+                    std_output = repr(stdout_value)
+                    std_error = repr(stderr_value)
+                    full_output = std_output + "\n" + std_error
+                    exact_output = full_output[2:-5]
+                    split_output = exact_output.split("\\n")
+                    logger_output = ""
+                    for item in split_output:
+                        logger_output += item + "\n"
+
             except Exception as e:
                 logger_output = str(e)
+
             finally:
                 temp.close()
 
-            def remove_last_line_of_string(s):
-                return s[:s.rfind('\n')]
+            def remove_last_line_of_string(code):
+                return "\n".join(code.split("\n")[:-3])
 
-            stream_content = {"name": "stdout", "text": remove_last_line_of_string(logger_output)}
+            stream_content = {
+                "name": "stdout",
+                "text": remove_last_line_of_string(logger_output),
+            }
             self.send_response(self.iopub_socket, "stream", stream_content)
 
         return {

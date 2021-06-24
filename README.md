@@ -37,7 +37,7 @@ Start your Jupyter Notebook by pushing the following command:
 python3 -m metacall_jupyter.launcher
 ```
 
-You can pick `metacall_jupyter` from the drop-down options and start working with the Jupyter Notebook interface.
+You can pick `metacall_jupyter` from the drop-down options and start working with the Jupyter Notebook interface. An example notebook showing the execution of Node Scripts can be found [here](examples).
 
 ## Docker
 
