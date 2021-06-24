@@ -3,3 +3,4 @@
 !requirements.txt
 !setup.py
 !metacall_jupyter/*.py
+!examples/
