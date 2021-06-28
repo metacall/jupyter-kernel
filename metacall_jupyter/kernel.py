@@ -59,14 +59,14 @@ class metacall_jupyter(Kernel):
                     for item in split_output:
                         logger_output += item + "\n"
 
+                    def remove_last_line_of_string(code):
+                        return "\n".join(code.split("\n")[:-3])
+
             except Exception as e:
                 logger_output = str(e)
 
             finally:
                 temp.close()
-
-            def remove_last_line_of_string(code):
-                return "\n".join(code.split("\n")[:-3])
 
             stream_content = {
                 "name": "stdout",
