@@ -2,6 +2,7 @@ import subprocess
 import tempfile
 import nest_asyncio
 from ipykernel.kernelbase import Kernel
+from guesslang import Guess
 
 nest_asyncio.apply()
 
@@ -41,7 +42,46 @@ class metacall_jupyter(Kernel):
         """
         if not silent:
             try:
-                with tempfile.NamedTemporaryFile(suffix=".js") as temp:
+
+                def guess_code(code):
+                    """
+                    Guess the User Code
+
+                    Parameters:
+                        code: The code snippet whose language is to be determined
+
+                    Returns:
+                        language: The language of the code snippet detected by guesslang
+                    """
+                    guess = Guess()
+                    language = guess.language_name(code)
+                    return language
+
+                def guess_extension(language):
+                    """
+                    Determines the extension of the language
+
+                    Parameters:
+                        language: The language of the code snippet passed, detected by guesslang
+
+                    Returns:
+                        extension: The extension for the code snippet
+                    """
+                    extensions = {
+                        "Python": ".py",
+                        "JavaScript": ".js",
+                        # TypeScript is given a `.ts` extension because `guesslang`
+                        # sometimes incorrectly identifies a JavaScript snippet as
+                        # that of TypeScript.
+                        "TypeScript": ".js",
+                    }
+                    extension = extensions[language]
+                    return extension
+
+                language = guess_code(code)
+                extension = guess_extension(language)
+
+                with tempfile.NamedTemporaryFile(suffix=extension) as temp:
                     temp.write(code.encode())
                     temp.flush()
                     result = subprocess.Popen(
@@ -59,18 +99,16 @@ class metacall_jupyter(Kernel):
                     for item in split_output:
                         logger_output += item + "\n"
 
+                    def remove_last_line_of_string(code):
+                        return "\n".join(code.split("\n")[:-3])
+
+                temp.close()
             except Exception as e:
                 logger_output = str(e)
 
-            finally:
-                temp.close()
-
-            def remove_last_line_of_string(code):
-                return "\n".join(code.split("\n")[:-3])
-
             stream_content = {
                 "name": "stdout",
-                "text": remove_last_line_of_string(logger_output),
+                "text": logger_output,
             }
             self.send_response(self.iopub_socket, "stream", stream_content)
 
