@@ -2,7 +2,7 @@
 
 ![image](assets/project-banner.gif)
 
-![Python CI build](https://github.com/metacall/jupyter-kernel/actions/workflows/ci.yml/badge.svg) [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/metacall/jupyter-kernel/master?filepath=examples)
+![Python CI build](https://github.com/metacall/jupyter-kernel/actions/workflows/ci.yml/badge.svg) [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/metacall/jupyter-kernel/master)
 
 ## Introduction
 

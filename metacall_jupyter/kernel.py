@@ -45,7 +45,7 @@ class metacall_jupyter(Kernel):
 
                 def guess_code(code):
                     """
-                    Executes the User Code
+                    Guess the User Code
 
                     Parameters:
                         code: The code snippet whose language is to be determined
@@ -70,6 +70,9 @@ class metacall_jupyter(Kernel):
                     extensions = {
                         "Python": ".py",
                         "JavaScript": ".js",
+                        # TypeScript is given a `.ts` extension because `guesslang`
+                        # sometimes incorrectly identifies a JavaScript snippet as
+                        # that of TypeScript.
                         "TypeScript": ".js",
                     }
                     extension = extensions[language]
