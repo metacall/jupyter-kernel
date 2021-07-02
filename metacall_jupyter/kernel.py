@@ -43,6 +43,8 @@ class metacall_jupyter(Kernel):
         """
         if not silent:
             try:
+                def remove_last_line_of_string(code):
+                    return "\n".join(code.split("\n")[:-3])
 
                 def guess_code(code):
                     """
@@ -58,21 +60,7 @@ class metacall_jupyter(Kernel):
                     language = guess.language_name(code)
                     return language
 
-                language = guess_code(code)
-
-                # Determines the extension of the language
-
-                extensions = {
-                    "Python": ".py",
-                    "JavaScript": ".js",
-                    # TypeScript is given a `.ts` extension because `guesslang`
-                    # sometimes incorrectly identifies a JavaScript snippet as
-                    # that of TypeScript.
-                    "TypeScript": ".js",
-                }
-
-                if language in extensions:
-                    extension = extensions[language]
+                def metacall_execute(code, extension):
                     with tempfile.NamedTemporaryFile(suffix=extension) as temp:
                         temp.write(code.encode())
                         temp.flush()
@@ -91,10 +79,26 @@ class metacall_jupyter(Kernel):
                         for item in split_output:
                             logger_output += item + "\n"
 
-                        def remove_last_line_of_string(code):
-                            return "\n".join(code.split("\n")[:-3])
-
                     temp.close()
+                    return logger_output
+
+                language = guess_code(code)
+
+                # Determines the extension of the language
+
+                extensions = {
+                    "Python": ".py",
+                    "JavaScript": ".js",
+                    # TypeScript is given a `.ts` extension because `guesslang`
+                    # sometimes incorrectly identifies a JavaScript snippet as
+                    # that of TypeScript.
+                    "TypeScript": ".js",
+                }
+
+                if language in extensions:
+                    extension = extensions[language]
+                    logger_output = metacall_execute(code, extension)
+
                 else:
                     logger_output = (
                         "We don't suppport "
