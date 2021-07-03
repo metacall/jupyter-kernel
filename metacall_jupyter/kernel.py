@@ -147,12 +147,12 @@ class metacall_jupyter(Kernel):
                     return code
 
                 extensions = {
-                    "Python": ".py",
-                    "JavaScript": ".js",
+                    "python": ".py",
+                    "javascript": ".js",
                     # TypeScript is given a `.ts` extension because `guesslang`
                     # sometimes incorrectly identifies a JavaScript snippet as
                     # that of TypeScript.
-                    "TypeScript": ".js",
+                    "typescript": ".js",
                 }
 
                 (magics, code) = split_magics(code)
@@ -168,6 +168,7 @@ class metacall_jupyter(Kernel):
 
                 else:
                     language = guess_code(code)
+                    language = language.lower()
                     if language in extensions:
                         extension = extensions[language]
                         logger_output = metacall_execute(code, extension)
