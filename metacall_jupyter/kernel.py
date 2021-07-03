@@ -1,6 +1,6 @@
 import subprocess
 import tempfile
-
+import re
 import nest_asyncio
 from guesslang import Guess
 from ipykernel.kernelbase import Kernel
@@ -43,10 +43,6 @@ class metacall_jupyter(Kernel):
         """
         if not silent:
             try:
-
-                def remove_last_line_of_string(code):
-                    """Removes the Last Line from the passed string"""
-                    return "\n".join(code.split("\n")[:-3])
 
                 def split_magics(code):
                     """
@@ -142,6 +138,14 @@ class metacall_jupyter(Kernel):
                     logger_output = exact_output.stdout.decode()
                     return logger_output
 
+                def delete_line_from_string(code):
+                    """Delete the Script loading message from the execution"""
+                    regex = re.compile(r'Script \(.+\) loaded correctly')
+                    match = regex.search(code)
+                    if match:
+                        code = regex.sub('', code)
+                    return code
+
                 extensions = {
                     "Python": ".py",
                     "JavaScript": ".js",
@@ -182,7 +186,7 @@ class metacall_jupyter(Kernel):
 
             stream_content = {
                 "name": "stdout",
-                "text": logger_output,
+                "text": delete_line_from_string(logger_output),
             }
             self.send_response(self.iopub_socket, "stream", stream_content)
 
