@@ -133,18 +133,25 @@ class metacall_jupyter(Kernel):
                     """
                     from subprocess import run, PIPE, STDOUT
 
-                    cmd = str(code[len(shcmd):].lstrip())
+                    cmd = str(code[len(shcmd) :].lstrip())
                     exact_output = run(cmd, stdout=PIPE, stderr=STDOUT, shell=True)
                     logger_output = exact_output.stdout.decode()
                     return logger_output
 
                 def delete_line_from_string(code):
                     """Delete the Script loading message from the execution"""
-                    regex = re.compile(r'Script \(.+\) loaded correctly')
+                    regex = re.compile(r"Script \(.+\) loaded correctly")
                     match = regex.search(code)
                     if match:
-                        code = regex.sub('', code)
+                        code = regex.sub("", code)
                     return code
+
+                def trim_empty_lines(text):
+                    """Trim the empty lines from the logger output for better formatting"""
+                    import os
+
+                    text = os.linesep.join([s for s in text.splitlines() if s])
+                    return text
 
                 extensions = {
                     "python": ".py",
@@ -187,7 +194,7 @@ class metacall_jupyter(Kernel):
 
             stream_content = {
                 "name": "stdout",
-                "text": delete_line_from_string(logger_output),
+                "text": trim_empty_lines(delete_line_from_string(logger_output)),
             }
             self.send_response(self.iopub_socket, "stream", stream_content)
 
