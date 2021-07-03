@@ -1,6 +1,6 @@
 import subprocess
 import tempfile
-
+import re
 import nest_asyncio
 from guesslang import Guess
 from ipykernel.kernelbase import Kernel
@@ -43,10 +43,6 @@ class metacall_jupyter(Kernel):
         """
         if not silent:
             try:
-
-                def remove_last_line_of_string(code):
-                    """Removes the Last Line from the passed string"""
-                    return "\n".join(code.split("\n")[:-3])
 
                 def split_magics(code):
                     """
@@ -142,28 +138,58 @@ class metacall_jupyter(Kernel):
                     logger_output = exact_output.stdout.decode()
                     return logger_output
 
+                def delete_line_from_string(code):
+                    """Delete the Script loading message from the execution"""
+                    regex = re.compile(r"Script \(.+\) loaded correctly")
+                    match = regex.search(code)
+                    if match:
+                        code = regex.sub("", code)
+                    return code
+
+                def trim_empty_lines(text):
+                    """Trim the empty lines from the logger output for better formatting"""
+                    import os
+
+                    text = os.linesep.join([s for s in text.splitlines() if s])
+                    return text
+
                 extensions = {
-                    "Python": ".py",
-                    "JavaScript": ".js",
+                    "python": ".py",
+                    "javascript": ".js",
                     # TypeScript is given a `.ts` extension because `guesslang`
                     # sometimes incorrectly identifies a JavaScript snippet as
                     # that of TypeScript.
-                    "TypeScript": ".js",
+                    "typescript": ".js",
                 }
 
                 (magics, code) = split_magics(code)
                 shcmd = "!"
+                shutd = "shutdown"
 
                 if code.startswith(shcmd):
                     logger_output = shell_execute(code, shcmd)
 
+                elif code.startswith(shutd):
+                    self.do_shutdown(False)
+
                 elif magics:
                     magic_lang = "".join(map(str, magics))
-                    extension = extensions[magic_lang]
-                    logger_output = metacall_execute(code, extension)
+                    if magic_lang in extensions:
+                        extension = extensions[magic_lang]
+                        logger_output = metacall_execute(code, extension)
+
+                    else:
+                        logger_output = (
+                            "We don't suppport "
+                            + magic_lang
+                            + " language, yet.\nPlease try another language or add support for "
+                            + magic_lang
+                            + " language.\n"
+                        )
 
                 else:
                     language = guess_code(code)
+                    language = language.lower()
                     if language in extensions:
                         extension = extensions[language]
                         logger_output = metacall_execute(code, extension)
@@ -182,7 +208,7 @@ class metacall_jupyter(Kernel):
 
             stream_content = {
                 "name": "stdout",
-                "text": logger_output,
+                "text": trim_empty_lines(delete_line_from_string(logger_output)),
             }
             self.send_response(self.iopub_socket, "stream", stream_content)
 
@@ -192,3 +218,18 @@ class metacall_jupyter(Kernel):
             "payload": [],
             "user_expressions": {},
         }
+
+    def do_shutdown(self, restart):
+        """
+        Executes the User Code
+
+        Parameters:
+            restart: Boolean value to determine the kernel is shutdown or restarted
+
+        Returns:
+            restart: Boolean value to signal the kernel shutdown
+        """
+        logger_output = "Kernel Shutdown!"
+        stream_content = {"name": "stdout", "text": logger_output}
+        self.send_response(self.iopub_socket, "stream", stream_content)
+        return {"restart": False}
