@@ -133,7 +133,7 @@ class metacall_jupyter(Kernel):
                     """
                     from subprocess import run, PIPE, STDOUT
 
-                    cmd = str(code[len(shcmd) :].lstrip())
+                    cmd = str(code[len(shcmd):].lstrip())
                     exact_output = run(cmd, stdout=PIPE, stderr=STDOUT, shell=True)
                     logger_output = exact_output.stdout.decode()
                     return logger_output
@@ -164,14 +164,28 @@ class metacall_jupyter(Kernel):
 
                 (magics, code) = split_magics(code)
                 shcmd = "!"
+                shutd = "shutdown"
 
                 if code.startswith(shcmd):
                     logger_output = shell_execute(code, shcmd)
 
+                elif code.startswith(shutd):
+                    self.do_shutdown(False)
+
                 elif magics:
                     magic_lang = "".join(map(str, magics))
-                    extension = extensions[magic_lang]
-                    logger_output = metacall_execute(code, extension)
+                    if magic_lang in extensions:
+                        extension = extensions[magic_lang]
+                        logger_output = metacall_execute(code, extension)
+
+                    else:
+                        logger_output = (
+                            "We don't suppport "
+                            + magic_lang
+                            + " language, yet.\nPlease try another language or add support for "
+                            + magic_lang
+                            + " language.\n"
+                        )
 
                 else:
                     language = guess_code(code)
@@ -204,3 +218,18 @@ class metacall_jupyter(Kernel):
             "payload": [],
             "user_expressions": {},
         }
+
+    def do_shutdown(self, restart):
+        """
+        Executes the User Code
+
+        Parameters:
+            restart: Boolean value to determine the kernel is shutdown or restarted
+
+        Returns:
+            restart: Boolean value to signal the kernel shutdown
+        """
+        logger_output = "Kernel Shutdown!"
+        stream_content = {"name": "stdout", "text": logger_output}
+        self.send_response(self.iopub_socket, "stream", stream_content)
+        return {"restart": False}
