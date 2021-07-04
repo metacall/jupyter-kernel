@@ -174,6 +174,7 @@ class metacall_jupyter(Kernel):
 
                 elif magics:
                     magic_lang = "".join(map(str, magics))
+                    magic_lang = magic_lang.lower()
                     if magic_lang in extensions:
                         extension = extensions[magic_lang]
                         logger_output = metacall_execute(code, extension)
