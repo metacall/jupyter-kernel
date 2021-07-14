@@ -29,6 +29,7 @@ python3 -m pip install --upgrade pip
 pip3 install -r requirements.txt
 python3 setup.py install
 python3 -m metacall_jupyter.install
+npm install
 ```
 
 Start your Jupyter Notebook by pushing the following command:
@@ -37,7 +38,7 @@ Start your Jupyter Notebook by pushing the following command:
 python3 -m metacall_jupyter.launcher
 ```
 
-You can pick `metacall_jupyter` from the drop-down options and start working with the Jupyter Notebook interface. An example notebook showing the execution of Node Scripts can be found [here](examples).
+You can pick `metacall_jupyter` from the drop-down options and start working with the Jupyter Notebook interface. Example Notebook are found [here](examples).
 
 ## Docker
 

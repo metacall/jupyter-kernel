@@ -1,0 +1,1 @@
+require('metacall-polyglot-repl');
