@@ -9,3 +9,4 @@ The following example notebooks display the use-case of MetaCall Core in an IPyt
 - [MetaCall Kernel Unsupported Language Notebook](MetaCall_Kernel_Unsupported_Language_Notebook.ipynb): Displays the custom log messags displayed due to unsupported languages by the MetaCall Kernel, on an IPython environment.
 - [MetaCall Kernel Magics Notebook](MetaCall_Kernel_Magics_Notebook.ipynb): Displays the use-case of `magics` like `%Python` and `%JavaScript` by the MetaCall Kernel, to execute code without `guesslang` inference, on an IPython environment.
 - [MetaCall Kernel Shell Commands](MetaCall_Kernel_Shell_Commands.ipynb): Displays the use-case of shell commands to install packages and run them through the Jupyter Notebook.
+- [MetaCall Kernel REPL Demonstration](MetaCall_Kernel_REPL_Example.ipynb): Displays the use-case of Polyglot REPL on the MetaCall Kernel and run them through the Jupyter Notebook.
