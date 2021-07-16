@@ -1,8 +1,6 @@
 from setuptools import setup
 import pathlib
 import pkg_resources
-import setuptools
-
 
 with open("README.md", "r") as f:
     readme = f.read()
