@@ -21,7 +21,8 @@ COPY --chown=1000:1000 . /opt/jupyter/
 RUN python3 -m pip install --upgrade pip \
     && pip install -r requirements.txt \
     && python3 setup.py install \
-    && python3 -m metacall_jupyter.install
+    && python3 -m metacall_jupyter.install \
+    && metacall npm install
 
 USER jupyter
 EXPOSE 8888
