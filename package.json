@@ -1,0 +1,31 @@
+{
+  "name": "jupyter-kernel-repl",
+  "version": "1.0.0",
+  "description": "REPL for the MetaCall Jupyter Kernel",
+  "main": "repl.js",
+  "directories": {
+    "doc": "docs",
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/metacall/jupyter-kernel.git"
+  },
+  "keywords": [
+    "repl",
+    "metacall-jupyter-kernel",
+    "polyglot-repl"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/metacall/jupyter-kernel/issues"
+  },
+  "homepage": "https://github.com/metacall/jupyter-kernel#readme",
+  "dependencies": {
+    "metacall-polyglot-repl": "github:metacall/polyglot-repl"
+  }
+}

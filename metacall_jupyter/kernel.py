@@ -1,9 +1,13 @@
 import subprocess
 import tempfile
 import re
+import logging
 import nest_asyncio
-from guesslang import Guess
 from ipykernel.kernelbase import Kernel
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 nest_asyncio.apply()
 
@@ -25,6 +29,26 @@ class metacall_jupyter(Kernel):
 
     banner = "Wrapper Kernel for MetaCall Core Library leveraging IPython and Jupyter"
 
+    def __init__(self, **kwargs):
+        """init method for the Kernel"""
+        Kernel.__init__(self, **kwargs)
+        self._start_metacall()
+
+    def _start_metacall(self):
+        """
+        Starts the MetaCall REPL Subprocess to take user input and execute the user code.
+        """
+        try:
+            self.metacall_subprocess = subprocess.Popen(
+                ["metacall", "repl.js"],
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            self.metacall_subprocess.stdout.readline()
+        except Exception as e:  # noqa: F841
+            logger.exception("MetaCall Subprocess failed to start")
+
     def do_execute(  # noqa: C901
         self, code, silent, store_history=True, user_expressions=None, allow_stdin=False
     ):
@@ -44,6 +68,28 @@ class metacall_jupyter(Kernel):
         if not silent:
             try:
 
+                def metacall_repl(code):
+                    """
+                    Function to execute the user code and return the result
+                    through MetaCall subprocess.
+
+                    Parameters:
+                        code: The code to be executed
+
+                    Returns:
+                        result: The result of the execution
+                    """
+                    code = code.lstrip() + "\n"
+                    arr = bytes(code, "utf-8")
+                    self.metacall_subprocess.stdin.write(arr)
+                    self.metacall_subprocess.stdin.flush()
+                    output = self.metacall_subprocess.stdout.readline()
+                    return output
+
+                def bye_to_string(code):
+                    """Function to convert the result of the execution to string"""
+                    return code.decode("UTF-8")
+
                 def split_magics(code):
                     """
                     Grabs the langage name passed in the magic and returns the magic and the code
@@ -62,28 +108,14 @@ class metacall_jupyter(Kernel):
                     state = "magics"
                     for line in lines:
                         if state == "magics":
-                            if line.startswith("%"):
-                                magics.append(line.lstrip("%"))
+                            if line.startswith(">"):
+                                magics.append(line.lstrip(">"))
                                 continue
                             elif not line:
                                 continue
                         state = "code"
                         code_lines.append(line)
                     return (magics, "\n".join(code_lines))
-
-                def guess_code(code):
-                    """
-                    Guess the User Code
-
-                    Parameters:
-                        code: The code snippet whose language is to be determined
-
-                    Returns:
-                        language: The language of the code snippet detected by guesslang
-                    """
-                    guess = Guess()
-                    language = guess.language_name(code)
-                    return language
 
                 def metacall_execute(code, extension):
                     """
@@ -153,14 +185,7 @@ class metacall_jupyter(Kernel):
                     text = os.linesep.join([s for s in text.splitlines() if s])
                     return text
 
-                extensions = {
-                    "python": ".py",
-                    "javascript": ".js",
-                    # TypeScript is given a `.ts` extension because `guesslang`
-                    # sometimes incorrectly identifies a JavaScript snippet as
-                    # that of TypeScript.
-                    "typescript": ".js",
-                }
+                extensions = {"python": ".py", "javascript": ".js"}
 
                 (magics, code) = split_magics(code)
                 shcmd = "!"
@@ -189,20 +214,8 @@ class metacall_jupyter(Kernel):
                         )
 
                 else:
-                    language = guess_code(code)
-                    language = language.lower()
-                    if language in extensions:
-                        extension = extensions[language]
-                        logger_output = metacall_execute(code, extension)
-
-                    else:
-                        logger_output = (
-                            "We don't suppport "
-                            + language
-                            + " language, yet.\nPlease try another language or add support for "
-                            + language
-                            + " language.\n"
-                        )
+                    output = metacall_repl(code)
+                    logger_output = bye_to_string(output)
 
             except Exception as e:
                 logger_output = str(e)

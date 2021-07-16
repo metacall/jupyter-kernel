@@ -13,7 +13,7 @@ setup(
     author="Harsh Bardhan Mishra",
     author_email="erbeusgriffincasper@gmail.com",
     url="https://github.com/metacall/jupyter-kernel",
-    install_requires=["jupyter_client", "IPython", "ipykernel", "metacall", "guesslang"],
+    install_requires=["jupyter_client", "IPython", "ipykernel", "metacall"],
     classifiers=[
         "Intended Audience :: Developers",
         "License :: OSI Approved :: Apache Software License",
