@@ -1,7 +1,18 @@
 from setuptools import setup
+import pathlib
+import pkg_resources
+import setuptools
+
 
 with open("README.md", "r") as f:
     readme = f.read()
+
+with pathlib.Path('requirements.txt').open() as requirements_txt:
+    install_requires = [
+        str(requirement)
+        for requirement
+        in pkg_resources.parse_requirements(requirements_txt)
+    ]
 
 setup(
     name="metacall_jupyter",
@@ -13,7 +24,7 @@ setup(
     author="Harsh Bardhan Mishra",
     author_email="erbeusgriffincasper@gmail.com",
     url="https://github.com/metacall/jupyter-kernel",
-    install_requires=["jupyter_client", "IPython", "ipykernel", "metacall"],
+    install_requires=install_requires,
     classifiers=[
         "Intended Audience :: Developers",
         "License :: OSI Approved :: Apache Software License",
