@@ -25,11 +25,12 @@ source env/bin/activate
 Next we can download all the dependenices and setup the Kernel:
 
 ```sh
+curl -sL https://raw.githubusercontent.com/metacall/install/master/install.sh | sh
 python3 -m pip install --upgrade pip
 pip3 install -r requirements.txt
 python3 setup.py install
 python3 -m metacall_jupyter.install
-npm install
+metacall npm install
 ```
 
 Start your Jupyter Notebook by pushing the following command:
