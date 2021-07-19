@@ -16,7 +16,7 @@ pickleshare==0.7.5
 prompt-toolkit==3.0.18
 ptyprocess==0.7.0
 Pygments==2.9.0
-python-dateutil==2.8.1
+python-dateutil==2.8.2
 pyzmq==22.1.0
 six==1.16.0
 tornado==6.1
