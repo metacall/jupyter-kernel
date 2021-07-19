@@ -68,6 +68,11 @@ class metacall_jupyter(Kernel):
         if not silent:
             try:
 
+                def error_message(code):
+                    """Highlights the error message in red color"""
+                    code = "\033[0;31m" + code + "\033[0m"
+                    return code
+
                 def metacall_repl(code):
                     """
                     Function to execute the user code and return the result
@@ -86,7 +91,7 @@ class metacall_jupyter(Kernel):
                     output = self.metacall_subprocess.stdout.readline()
                     return output
 
-                def bye_to_string(code):
+                def byte_to_string(code):
                     """Function to convert the result of the execution to string"""
                     return code.decode("UTF-8")
 
@@ -167,7 +172,10 @@ class metacall_jupyter(Kernel):
 
                     cmd = str(code[len(shcmd):].lstrip())
                     exact_output = run(cmd, stdout=PIPE, stderr=STDOUT, shell=True)
-                    logger_output = exact_output.stdout.decode()
+                    if exact_output.returncode == 0:
+                        logger_output = exact_output.stdout.decode()
+                    else:
+                        logger_output = error_message(exact_output.stdout.decode())
                     return logger_output
 
                 def delete_line_from_string(code):
@@ -215,10 +223,13 @@ class metacall_jupyter(Kernel):
 
                 else:
                     output = metacall_repl(code)
-                    logger_output = bye_to_string(output)
+                    logger_output = byte_to_string(output)
 
             except Exception as e:
-                logger_output = str(e)
+                logger_output = error_message(str(e))
+
+            if "error" in logger_output:
+                logger_output = error_message(logger_output)
 
             stream_content = {
                 "name": "stdout",
@@ -235,7 +246,7 @@ class metacall_jupyter(Kernel):
 
     def do_shutdown(self, restart):
         """
-        Executes the User Code
+        Shuts down the Kernel.
 
         Parameters:
             restart: Boolean value to determine the kernel is shutdown or restarted
