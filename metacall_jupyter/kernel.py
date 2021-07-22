@@ -73,6 +73,25 @@ class metacall_jupyter(Kernel):
                     code = "\033[0;31m" + code + "\033[0m"
                     return code
 
+                def newfile_magic(code):
+                    """
+                    Function to save a new file using the `$newfile` magic.
+
+                    Parameters:
+                        code: The code to be executed
+
+                    Returns:
+                        A success message once the file has been saved
+                    """
+
+                    code = code + "\n"
+                    magic_argument = code.split("\n")[0]
+                    file_name = magic_argument.lstrip("$newfile ")
+                    file_input = code.split("\n", 1)[1]
+                    with open(file_name, "a", encoding="utf-8") as file:
+                        file.write(file_input)
+                    return "File " + file_name + " is saved."
+
                 def metacall_repl(code):
                     """
                     Function to execute the user code and return the result
@@ -198,9 +217,13 @@ class metacall_jupyter(Kernel):
                 (magics, code) = split_magics(code)
                 shcmd = "!"
                 shutd = "shutdown"
+                newfile = "$newfile"
 
                 if code.startswith(shcmd):
                     logger_output = shell_execute(code, shcmd)
+
+                elif code.startswith(newfile):
+                    logger_output = newfile_magic(code)
 
                 elif code.startswith(shutd):
                     self.do_shutdown(False)
