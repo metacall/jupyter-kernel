@@ -3,6 +3,7 @@ import tempfile
 import re
 import logging
 import nest_asyncio
+import json
 from ipykernel.kernelbase import Kernel
 
 logging.basicConfig(level=logging.INFO)
@@ -197,6 +198,44 @@ class metacall_jupyter(Kernel):
                         logger_output = error_message(exact_output.stdout.decode())
                     return logger_output
 
+                def metacall_inspect():
+                    """
+                    Executes the %inspect on the REPL subprocess to check all loaded functions
+
+                    Returns:
+                        inspect: A dictionary showing all available functions across the REPL state
+                    """
+                    code = "%inspect"
+                    code = code.lstrip() + "\n"
+                    code_bytes = bytes(code, "utf-8")
+                    self.metacall_subprocess.stdin.write(code_bytes)
+                    self.metacall_subprocess.stdin.flush()
+                    inspect = ""
+                    while True:
+                        line = self.metacall_subprocess.stdout.readline()
+                        inspect = inspect + line.decode("utf-8")
+                        if line == b"\n":
+                            break
+                    return json.loads(inspect)
+
+                def metacall_load(code):
+                    """
+                    Loads a function through the Kernel on the REPL Subprocess for
+                    inter-language function calls
+
+                    Parameters:
+                        code: Load command in the format: `%load <tag> <file_0>... <file_N>`
+                    """
+                    try:
+                        code = code.lstrip() + "\n"
+                        code_bytes = bytes(code, "utf-8")
+                        self.metacall_subprocess.stdin.write(code_bytes)
+                        self.metacall_subprocess.stdin.flush()
+                        self.metacall_subprocess.stdout.readline()
+                        return "The file has been successfully loaded"
+                    except:  # noqa: E722
+                        return "The file was not loaded onto the Kernel"
+
                 def delete_line_from_string(code):
                     """Delete the Script loading message from the execution"""
                     regex = re.compile(r"Script \(.+\) loaded correctly")
@@ -218,9 +257,17 @@ class metacall_jupyter(Kernel):
                 shcmd = "!"
                 shutd = "shutdown"
                 newfile = "$newfile"
+                inspect_command = "%inspect"
+                load_command = "%load"
 
                 if code.startswith(shcmd):
                     logger_output = shell_execute(code, shcmd)
+
+                elif code.startswith(inspect_command):
+                    logger_output = json.dumps(metacall_inspect())
+
+                elif code.startswith(load_command):
+                    logger_output = metacall_load(code)
 
                 elif code.startswith(newfile):
                     logger_output = newfile_magic(code)
