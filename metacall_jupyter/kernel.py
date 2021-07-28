@@ -255,12 +255,28 @@ class metacall_jupyter(Kernel):
 
                 (magics, code) = split_magics(code)
                 shcmd = "!"
-                shutd = "shutdown"
+                shutd = "$shutdown"
                 newfile = "$newfile"
                 inspect_command = "%inspect"
                 load_command = "%load"
+                help_command = "$help"
 
-                if code.startswith(shcmd):
+                if code.startswith(help_command):
+                    logger_output = (
+                        "1. ! : Run a Shell Command on the MetaCall Jupyter Kernel\n"
+                        + "2. shutdown : Shutdown the MetaCall Jupyter Kernel\n"
+                        + "3. $inspect : Inspects the MetaCall to check all loaded functions\n"
+                        + "4. %load: Loads a file onto the MetaCall which can be evaluated\n"
+                        + "5. $newfile: Creates a new file and appends the code mentioned below\n"
+                        + "6. %repl <tag>: Switch from different REPL (available tags: node, py)\n"
+                        + "7. >lang: Execute scripts using the MetaCall exec by saving them in a "
+                        + "temporary file (available languages: python, javascript)\n"
+                        + "8. $help: Check all the commands and tags you can use while accessing "
+                        + "the MetaCall Kernel\n"
+                        + "9. %available: Checks all the available REPLs on the Kernel"
+                    )
+
+                elif code.startswith(shcmd):
                     logger_output = shell_execute(code, shcmd)
 
                 elif code.startswith(inspect_command):

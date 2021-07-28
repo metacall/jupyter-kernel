@@ -28,10 +28,7 @@ def install_my_kernel_spec(user=True, prefix=None):
             json.dump(metacall_kernel_json, f, sort_keys=True)
         print("Installing Jupyter Kernel for MetaCall Core")
         KernelSpecManager().install_kernel_spec(
-            temporary_directory,
-            "metacall_jupyter",
-            user=user,
-            prefix=prefix,
+            temporary_directory, "metacall_jupyter", user=user, prefix=prefix,
         )
 
 
