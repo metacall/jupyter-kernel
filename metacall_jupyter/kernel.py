@@ -260,11 +260,12 @@ class metacall_jupyter(Kernel):
                 inspect_command = "%inspect"
                 load_command = "%load"
                 help_command = "$help"
+                logger_output = ""
 
                 if code.startswith(help_command):
                     logger_output = (
                         "1. ! : Run a Shell Command on the MetaCall Jupyter Kernel\n"
-                        + "2. shutdown : Shutdown the MetaCall Jupyter Kernel\n"
+                        + "2. $shutdown : Shutdown the MetaCall Jupyter Kernel\n"
                         + "3. $inspect : Inspects the MetaCall to check all loaded functions\n"
                         + "4. %load: Loads a file onto the MetaCall which can be evaluated\n"
                         + "5. $newfile: Creates a new file and appends the code mentioned below\n"
@@ -340,6 +341,12 @@ class metacall_jupyter(Kernel):
         Returns:
             restart: Boolean value to signal the kernel shutdown
         """
+        code = "%exit"
+        code = code.lstrip() + "\n"
+        arr = bytes(code, "utf-8")
+        self.metacall_subprocess.stdin.write(arr)
+        self.metacall_subprocess.stdin.flush()
+        self.metacall_subprocess.stdout.readline()
         logger_output = "Kernel Shutdown!"
         stream_content = {"name": "stdout", "text": logger_output}
         self.send_response(self.iopub_socket, "stream", stream_content)
