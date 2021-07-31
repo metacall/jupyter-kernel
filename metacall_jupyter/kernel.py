@@ -258,7 +258,7 @@ class metacall_jupyter(Kernel):
                 shutd = "$shutdown"
                 newfile = "$newfile"
                 inspect_command = "%inspect"
-                load_command = "%load"
+                load_command = "$loadfile"
                 help_command = "$help"
                 logger_output = ""
 
@@ -267,7 +267,7 @@ class metacall_jupyter(Kernel):
                         "1. ! : Run a Shell Command on the MetaCall Jupyter Kernel\n"
                         + "2. $shutdown : Shutdown the MetaCall Jupyter Kernel\n"
                         + "3. $inspect : Inspects the MetaCall to check all loaded functions\n"
-                        + "4. %load: Loads a file onto the MetaCall which can be evaluated\n"
+                        + "4. $loadfile: Loads a file onto the MetaCall which can be evaluated\n"
                         + "5. $newfile: Creates a new file and appends the code mentioned below\n"
                         + "6. %repl <tag>: Switch from different REPL (available tags: node, py)\n"
                         + "7. >lang: Execute scripts using the MetaCall exec by saving them in a "
@@ -284,6 +284,8 @@ class metacall_jupyter(Kernel):
                     logger_output = json.dumps(metacall_inspect())
 
                 elif code.startswith(load_command):
+                    code = code.split(' ', 1)[1]
+                    code = "%load " + code
                     logger_output = metacall_load(code)
 
                 elif code.startswith(newfile):
