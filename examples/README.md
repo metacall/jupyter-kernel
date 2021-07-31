@@ -11,4 +11,5 @@ The following example notebooks display the use-case of MetaCall Core in an IPyt
 - [MetaCall Kernel Shell Commands](MetaCall_Kernel_Shell_Commands.ipynb): Displays the use-case of shell commands to install packages and run them through the Jupyter Notebook.
 - [MetaCall Kernel REPL Demonstration](MetaCall_Kernel_REPL_Example.ipynb): Displays the use-case of Polyglot REPL on the MetaCall Kernel and run them through the Jupyter Notebook.
 - [MetaCall Kernel Newfile Magic Demonstration](MetaCall_Kernel_Newfile_Magics.ipynb): Displays the use-case of using the `$newfile` magics on the MetaCall Kernel to save file on disk.
-- [MetaCall Kernel Inspect and Load Demonstration](MetaCall_Kernel_Inspect_Load.ipynb): Displays the use-case of using the `%inspect` and `%load` magics on the MetaCall Kernel for inter-language function calls.
+- [MetaCall Kernel Inspect and Load Demonstration](MetaCall_Kernel_Inspect_Load_Notebook.ipynb): Displays the use-case of using the `%inspect` and `%load` magics on the MetaCall Kernel for inter-language function calls.
+- [MetaCall Kernel Loadcell Demonstration](MetaCall_Kernel_Loadcell_Notebook.ipynb): Displays the use-case of using the `$loadcell` magic to load a function on the MetaCall Kernel for inter-language function calls.
