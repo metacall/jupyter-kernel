@@ -5,6 +5,7 @@ import os
 import json
 import logging
 import nest_asyncio
+from traitlets import List
 from ipykernel.kernelbase import Kernel
 
 logging.basicConfig(level=logging.INFO)
@@ -28,8 +29,23 @@ class metacall_jupyter(Kernel):
         "mimetype": "text/plain",
         "file_extension": ".txt",
     }
-
     banner = "Wrapper Kernel for MetaCall Core Library leveraging IPython and Jupyter"
+    help_links = List(
+        [
+            {
+                "text": "MetaCall Core",
+                "url": "https://github.com/metacall/core",
+            },
+            {
+                "text": "MetaCall Polyglot REPL",
+                "url": "https://github.com/metacall/polyglot-repl",
+            },
+            {
+                "text": "MetaCall Jupyter Kernel",
+                "url": "https://github.com/metacall/jupyter-kernel",
+            },
+        ]
+    )
 
     def __init__(self, **kwargs):
         """init method for the Kernel"""
@@ -295,6 +311,27 @@ class metacall_jupyter(Kernel):
                     text = os.linesep.join([s for s in text.splitlines() if s])
                     return text
 
+                def available_repl():
+                    """
+                    Function to check for available REPLs on the MetaCall Kernel
+
+                    Returns:
+                        available_repl: List of REPLs available on the Kernel
+                    """
+                    code = byte_to_string(metacall_repl("%available"))
+                    lang = code.split(":")[1].lstrip().rstrip()
+                    lang = list(lang.split(" "))
+                    repl_languages = {
+                        "py": "Python: Use `%repl py` to activate",
+                        "node": "JavaScript: Use `%repl node` to activate",
+                    }
+                    available_repl = ""
+                    for key, value in repl_languages.items():
+                        for i in lang:
+                            if key == i:
+                                available_repl = available_repl + value + "\n"
+                    return available_repl.lstrip()
+
                 extensions = {"python": ".py", "javascript": ".js"}
 
                 (magics, code) = split_magics(code)
@@ -306,6 +343,7 @@ class metacall_jupyter(Kernel):
                 help_command = "$help"
                 logger_output = ""
                 loadcell = "$loadcell"
+                available = "$available"
 
                 if code.startswith(help_command):
                     logger_output = (
@@ -320,8 +358,10 @@ class metacall_jupyter(Kernel):
                         + "8. $loadcell <tag>: Loads a function onto the MetaCall to be evaluated\n"
                         + "9. $help: Check all the commands and tags you can use while accessing "
                         + "the MetaCall Kernel\n"
-                        + "10. %available: Checks all the available REPLs on the Kernel"
+                        + "10. $available: Checks all the available REPLs on the Kernel"
                     )
+                elif code.startswith(available):
+                    logger_output = available_repl()
 
                 elif code.startswith(loadcell):
                     code, extension = loadcell_extension(code)
