@@ -5,6 +5,7 @@ import os
 import json
 import logging
 import nest_asyncio
+from traitlets import List
 from ipykernel.kernelbase import Kernel
 
 logging.basicConfig(level=logging.INFO)
@@ -28,8 +29,23 @@ class metacall_jupyter(Kernel):
         "mimetype": "text/plain",
         "file_extension": ".txt",
     }
-
     banner = "Wrapper Kernel for MetaCall Core Library leveraging IPython and Jupyter"
+    help_links = List(
+        [
+            {
+                "text": "MetaCall Core",
+                "url": "https://github.com/metacall/core",
+            },
+            {
+                "text": "MetaCall Polyglot REPL",
+                "url": "https://github.com/metacall/polyglot-repl",
+            },
+            {
+                "text": "MetaCall Jupyter Kernel",
+                "url": "https://github.com/metacall/jupyter-kernel",
+            },
+        ]
+    )
 
     def __init__(self, **kwargs):
         """init method for the Kernel"""
@@ -303,11 +319,11 @@ class metacall_jupyter(Kernel):
                         available_repl: List of REPLs available on the Kernel
                     """
                     code = byte_to_string(metacall_repl("%available"))
-                    lang = code.split(':')[1].lstrip().rstrip()
+                    lang = code.split(":")[1].lstrip().rstrip()
                     lang = list(lang.split(" "))
                     repl_languages = {
-                        'py': 'Python: Use `%repl py` to activate',
-                        'node': 'JavaScript: Use `%repl node` to activate'
+                        "py": "Python: Use `%repl py` to activate",
+                        "node": "JavaScript: Use `%repl node` to activate",
                     }
                     available_repl = ""
                     for key, value in repl_languages.items():
