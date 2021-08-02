@@ -3,7 +3,8 @@ ENV VIRTUAL_ENV=/opt/venv
 RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
-RUN mkdir -p /opt/jupyter \
+RUN groupadd -r jupyter -g 1000 \
+    && useradd -u 1000 -r -g jupyter -m -d /opt/jupyter -s /sbin/nologin -c "jupyter user" jupyter \
     && chmod 755 /opt/jupyter \
     && apt-get update \
     && apt-get install -y --no-install-recommends curl \
@@ -15,7 +16,7 @@ RUN mkdir -p /opt/jupyter \
 
 WORKDIR /opt/jupyter
 
-COPY . /opt/jupyter/
+COPY --chown=1000:1000 . /opt/jupyter/
 
 RUN python3 -m pip install --upgrade pip \
     && pip install -r requirements.txt \
@@ -23,5 +24,6 @@ RUN python3 -m pip install --upgrade pip \
     && python3 -m metacall_jupyter.install \
     && metacall npm install
 
+USER jupyter
 EXPOSE 8888
 CMD ["python3", "-m", "metacall_jupyter.launcher"]
