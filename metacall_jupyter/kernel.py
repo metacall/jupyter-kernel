@@ -1,9 +1,12 @@
 import subprocess
 import tempfile
 import re
+import sys
 import os
 import json
 import logging
+import sqlite3
+import traceback
 import nest_asyncio
 from traitlets import List
 from ipykernel.kernelbase import Kernel
@@ -11,7 +14,7 @@ from ipykernel.kernelbase import Kernel
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-
+HISTORY_DB = None
 nest_asyncio.apply()
 
 
@@ -47,6 +50,10 @@ class metacall_jupyter(Kernel):
         ]
     )
 
+    history = {}
+    results = {}
+    history_db_ready = False
+
     def __init__(self, **kwargs):
         """init method for the Kernel"""
         Kernel.__init__(self, **kwargs)
@@ -67,6 +74,39 @@ class metacall_jupyter(Kernel):
         except Exception as e:  # noqa: F841
             logger.exception("MetaCall Subprocess failed to start")
 
+    def start_history(self):
+        """
+        Starts the MetaCall Kernel History Database
+        """
+        db_name = HISTORY_DB
+        try:
+            self.history_db = sqlite3.connect(db_name)
+            c = self.history_db.cursor()
+            c.execute(
+                "create table if not exists history (session text, execution_count int, code text, result text)"  # noqa: E501
+            )
+            self.history_db_ready = True
+        except:  # noqa: E722
+            print(sys.exc_info()[0])
+            traceback.print_tb(sys.exc_info()[2])
+
+    def record_history(self, session, count, code, data):
+        """
+        Record the user code and the result of the user code to the history database.
+        """
+        try:
+            result = data._repr_text_()
+            if type(result) == list:
+                result = str(result)
+            c = self.history_db.cursor()
+            c.execute(
+                "insert into history values (?,?,?,?)", (session, count, code, result)
+            )
+            self.history_db.commit()
+        except:  # noqa: E722
+            print(sys.exc_info()[0])
+            traceback.print_tb(sys.exc_info()[2])
+
     def do_execute(  # noqa: C901
         self, code, silent, store_history=True, user_expressions=None, allow_stdin=False
     ):
@@ -83,6 +123,10 @@ class metacall_jupyter(Kernel):
         Returns:
             send_response: Sends the execution result
         """
+
+        if store_history:
+            self.history[self.execution_count] = code
+
         if not silent:
             try:
 
@@ -407,6 +451,13 @@ class metacall_jupyter(Kernel):
             except Exception as e:
                 logger_output = error_message(str(e))
 
+            if store_history:
+                self.results[self.execution_count] = logger_output
+
+            self.record_history(
+                self.session.session, self.execution_count, code, logger_output
+            )
+
             if "error" in logger_output:
                 logger_output = error_message(logger_output)
 
@@ -422,6 +473,86 @@ class metacall_jupyter(Kernel):
             "payload": [],
             "user_expressions": {},
         }
+
+    def do_history(
+        self,
+        hist_access_type,
+        output,
+        raw,
+        session=None,
+        start=None,
+        stop=None,
+        n=None,
+        pattern=None,
+        unique=False,
+    ):
+        """
+        Parameters:
+            hist_access_type (str): 'tail' or 'range'
+            output (bool): If True, then the history is printed to stdout.
+                           Otherwise, it is returned as a string.
+            raw (bool): If True, then the history is not formatted in any way.
+            session (str): The name of the session.
+            start (int): The first execution count from the history to get.
+            stop (int): The last execution count from the history to get.
+            n (int): The number of executions to get.
+            pattern (str): The pattern to search the history with.
+            unique (bool): If True, then only unique history items are shown.
+
+        Returns:
+            history (str): The history of the session.
+        """
+        if hist_access_type == "tail":
+            hist = self.get_tail(n, raw=raw, output=output, include_latest=True)
+        elif hist_access_type == "range":
+            hist = self.get_range(session, start, stop, raw=raw, output=output)
+        elif hist_access_type == "search":
+            hist = self.search(pattern, raw=raw, output=output, n=n, unique=unique)
+        else:
+            hist = []
+
+        return {"history": list(hist)}
+
+    def get_tail(self, n, raw, output, include_latest):
+        """
+        Parameters:
+            n (int): The number of lines to be fetched
+            raw (bool): Whether to include raw_history
+            output (bool): Whether to include output
+            include_latest (bool): Whether to include the latest
+
+        Returns:
+            list: A list of lines
+        """
+        n = n or self.history.__len__()
+        key_range = list(self.history.keys())[-n:]
+        result = []
+        for key in key_range:
+            r = (key + 1, self.history[key], self.results[key]._repr_text_())
+            result.append(r)
+        return result
+
+    def get_range(self, session, start, stop, raw, output):
+        """
+        Parameters:
+            session: session name
+            start: start line number
+            stop: stop line number
+            raw: True to get the raw input
+            output: True to get the formatted output
+
+        Returns:
+            result: A list of tuples (source, input, output)
+        """
+        start = start or 0
+        stop = stop or self.history.__len__()
+        start = start if start == 0 else start - 1
+        key_range = list(self.history.keys())[start:stop]
+        result = []
+        for key in key_range:
+            r = (key + 1, self.history[key], self.results[key]._repr_text_())
+            result.append(r)
+        return result
 
     def do_shutdown(self, restart):
         """
