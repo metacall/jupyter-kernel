@@ -4,3 +4,4 @@ The following example notebooks display the use-case of MetaCall Core in an IPyt
 
 ## Examples
 
+- [Introductory Notebook](01-Introduction-MetaCall-Jupyter-Notebook.ipynb): Displays the use-case of Polyglot REPL on the MetaCall Kernel and run them through the Jupyter Notebook.
