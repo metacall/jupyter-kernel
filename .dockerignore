@@ -4,3 +4,5 @@
 !setup.py
 !metacall_jupyter/*.py
 !examples/
+!*.js
+!package.json
