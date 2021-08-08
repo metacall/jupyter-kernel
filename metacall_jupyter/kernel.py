@@ -382,7 +382,7 @@ class metacall_jupyter(Kernel):
                 shcmd = "!"
                 shutd = "$shutdown"
                 newfile = "$newfile"
-                inspect_command = "%inspect"
+                inspect_command = "$inspect"
                 load_command = "$loadfile"
                 help_command = "$help"
                 logger_output = ""
