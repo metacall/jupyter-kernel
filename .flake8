@@ -81,7 +81,7 @@ hang-closing = True
 
 # Specify a list of codes to ignore.
 ignore =
-    W503, E251, E133
+    W503, E251, E133, E265
 # Specify the list of error codes you wish Flake8 to report.
 select =
     E,
