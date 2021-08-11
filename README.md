@@ -53,6 +53,20 @@ Run the image:
 docker run --rm --network=host -it metacall/jupyter
 ```
 
+## Testing
+
+To run the tests, push the following command:
+
+```sh
+pytest test-kernel.py
+```
+
+The script will run all the tests. To generate a coverage report, we are using the `pytest-cov` plugin, which can be invoked by pushing the following command: 
+
+```sh
+pytest --cov=metacall_jupyter test-kernel.py
+```
+
 ## Contributing
 
 To get started with contributing, check out the [Code of Conduct](CODE_OF_CONDUCT.md) and create an [Issue](https://github.com/metacall/jupyter-kernel/issues/new) to get started.

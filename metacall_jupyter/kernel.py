@@ -361,10 +361,11 @@ class metacall_jupyter(Kernel):
                     inter-language function calls
 
                     Parameters:
-                        code: Load command in the format: `%load <tag> <file_0>... <file_N>`
+                        code: Load command in the format: `$load <tag> <file_0>... <file_N>`
                     """
                     try:
                         code = code.lstrip() + "\n"
+                        logger.info(code)
                         code_bytes = bytes(code, "utf-8")
                         self.metacall_subprocess.stdin.write(code_bytes)
                         self.metacall_subprocess.stdin.flush()
