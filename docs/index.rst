@@ -7,16 +7,6 @@ Welcome to MetaCall Jupyter Kernel's documentation!
 ===================================================
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :hidden:
 
-   autodoc
-
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   contributing
