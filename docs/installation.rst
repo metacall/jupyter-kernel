@@ -51,8 +51,7 @@ Start your Jupyter Notebook by pushing the following command:
    python3 -m metacall_jupyter.launcher
 
 You can pick ``metacall_jupyter`` from the drop-down options and start
-working with the Jupyter Notebook interface. Example Notebook are found
-`here`_.
+working with the Jupyter Notebook interface.
 
 Building the Kernel
 ~~~~~~~~~~~~~~~~~~~
@@ -65,6 +64,21 @@ changes, run through your changes:
 
    python3 -m metacall_jupyter.install
    python3 -m metacall_jupyter.launcher
+
+Docker setup
+~~~~~~~~~~~~~
+
+Build the image:
+
+::
+
+   docker build -t metacall/jupyter .
+
+Run the image:
+
+::
+
+   docker run --rm --network=host -it metacall/jupyter
 
 Run the Tests
 ~~~~~~~~~~~~~

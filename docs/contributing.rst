@@ -24,14 +24,14 @@ have a few steps outlined for you.
 Create a GitHub account
 -----------------------
 
-Before you can contribute to MetaCall’s Jupyter Kernel, you must `sign
-up for a GitHub account`_.
+Before you can contribute to MetaCall’s Jupyter Kernel, you must sign up
+for a GitHub account.
 
 Set up authentication
 ---------------------
 
-When you have your account set up, follow the instructions to `generate
-and set up SSH keys on GitHub`_ for proper authentication between your
+When you have your account set up, follow the instructions to generate
+and set up SSH keys on GitHub for proper authentication between your
 workstation and GitHub.
 
 Confirm authentication is working correctly with the following command:
