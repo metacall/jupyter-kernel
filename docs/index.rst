@@ -9,4 +9,5 @@ Welcome to MetaCall Jupyter Kernel's documentation!
 .. toctree::
    :hidden:
 
+   installation
    contributing
