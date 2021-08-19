@@ -49,4 +49,5 @@ that the `Jupyter`_ notebook understands, and thus eventually displayed.
    :caption: Contents:
 
    installation
+   getting-started
    contributing
