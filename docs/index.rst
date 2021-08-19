@@ -50,4 +50,5 @@ that the `Jupyter`_ notebook understands, and thus eventually displayed.
 
    installation
    getting-started
+   usage
    contributing
