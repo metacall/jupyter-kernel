@@ -33,12 +33,13 @@ metacall_kernel_json = {
 
 
 def install_my_kernel_spec(user=True, prefix=None):
-    """
-    Installs the Kernel Specification
+    """Installs the Kernel Specification
 
-    Parameters:
+    Args:
         user: Checks the User installation
         prefix: Checks for the specific prefix
+    Returns:
+        None
     """
     with TemporaryDirectory() as temporary_directory:
         # Starts off as 700; Not user-readable
@@ -52,9 +53,7 @@ def install_my_kernel_spec(user=True, prefix=None):
 
 
 def _is_root():
-    """
-    Checks if the User is an Admin on a UNIX platform
-    """
+    """Checks if the User is an Admin on a UNIX platform"""
     try:
         return os.geteuid() == 0
     except AttributeError:
@@ -62,8 +61,7 @@ def _is_root():
 
 
 def main(argv=None):
-    """
-    Creates a function to pass Arguement Parser
+    """Creates a function to pass Argument Parser
     """
     parser = argparse.ArgumentParser(
         description="Kernel Installation for MetaCall Core"
