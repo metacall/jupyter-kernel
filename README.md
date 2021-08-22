@@ -11,7 +11,7 @@
 MetaCall Jupyter Kernel is an open-source wrapper kernel that implements cross-language function calls through the [MetaCall Core](https://github.com/metacall/core) and the [Polyglot REPL](https://github.com/metacall/polyglot-repl). MetaCall Core is an open-source library that brings the polyglot programming experience to Developers. With MetaCall, developers can embed different programming languages through an easy-to-use high-level API.
 
 The Kernel exposes the MetaCall Core API which can be loaded and launched through a Jupyter Notebook interface. With this Notebook, the
-users can try out writing, mixing and embedding code in different programming languages.
+users can try out writing, mixing and embedding code in different programming languages. The project is available on [PyPi](https://pypi.org/project/metacall-jupyter/).
 
 ## Key features
 
@@ -25,7 +25,7 @@ users can try out writing, mixing and embedding code in different programming la
 
 ## Installation
 
-It is recommended to use a Virtual Environment to manage your dependenices and the application build. We will first start with setting up the Local Project Environment:
+It is recommended to use a Virtual Environment to manage your dependencies and the application build. We will first start with setting up the Local Project Environment:
 
 ```sh
 git clone https://github.com/metacall/jupyter-kernel.git
