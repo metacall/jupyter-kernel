@@ -101,6 +101,8 @@ To get started with contributing, check out the [Code of Conduct](CODE_OF_CONDUC
 
 If you are new to Git & GitHub, you can find more information [here](https://metacall-jupyter-kernel.readthedocs.io/en/latest/contributing.html). It contains all the information about making the changes, linting, running the CI locally and submitting the pull request.
 
+You can view the [Change Log](CHANGELOG.md) to see what has changed in the project, since its inception.
+
 ## LICENSE
 
 [Apache-2.0 License](LICENSE)

@@ -53,3 +53,4 @@ that the `Jupyter`_ notebook understands, and thus eventually displayed.
    usage
    autodoc
    contributing
+   changelog
