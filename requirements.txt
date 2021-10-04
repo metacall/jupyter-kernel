@@ -28,4 +28,4 @@ notebook==6.4.0
 colorama==0.4.4
 asyncio==3.4.3
 pytest==6.2.4
-pytest-cov==2.12.1
+pytest-cov==3.0.0
