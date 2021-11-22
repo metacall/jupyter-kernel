@@ -12,7 +12,7 @@ Pygments==2.9.0
 pyparsing==2.4.7
 pytz==2021.1
 requests==2.25.1
-snowballstemmer==2.1.0
+snowballstemmer==2.2.0
 Sphinx==4.0.2
 sphinx-rtd-theme==0.5.2
 sphinxcontrib-applehelp==1.0.2
