@@ -34,7 +34,7 @@ jupyter-client==6.1.12
 jupyter-core==4.7.1
 matplotlib-inline==0.1.2
 nest-asyncio==1.5.1
-parso==0.8.2
+parso==0.8.3
 pexpect==4.8.0
 pickleshare==0.7.5
 prompt-toolkit==3.0.18
