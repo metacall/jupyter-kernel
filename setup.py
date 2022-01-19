@@ -45,6 +45,6 @@ setup(
     classifiers=[
         "Intended Audience :: Developers",
         "License :: OSI Approved :: Apache Software License",
-        "Programming Language :: Python :: 3.6", #python is the default programming language
+        "Programming Language :: Python :: 3.6",  #python is the default language
     ],
 )

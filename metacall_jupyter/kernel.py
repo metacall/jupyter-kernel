@@ -36,8 +36,8 @@ logger = logging.getLogger(__name__)
 HISTORY_DB = None
 nest_asyncio.apply()
 
-message=input("Enter Which Programming Language You want To Work With : ")
-print("Welcome to, ",message)
+message=input('Enter Which Programming Language You want To Work With : ')
+print('Welcome to, ',message)
 class metacall_jupyter(Kernel):
     """Defines the Jupyter Kernel declaration for MetaCall Core
     """
