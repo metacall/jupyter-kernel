@@ -9,7 +9,7 @@ jedi==0.18.0
 jupyter-client==7.1.2
 jupyter-core==4.7.1
 matplotlib-inline==0.1.2
-nest-asyncio==1.5.1
+nest-asyncio==1.5.5
 parso==0.8.2
 pexpect==4.8.0
 pickleshare==0.7.5
