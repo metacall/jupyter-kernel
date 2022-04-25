@@ -48,7 +48,7 @@ traitlets==5.0.5
 typing-extensions==3.10.0.0
 wcwidth==0.2.5
 zipp==3.4.1
-notebook==6.4.10
+notebook==6.4.11
 colorama==0.4.4
 asyncio==3.4.3
 pytest==7.1.1
