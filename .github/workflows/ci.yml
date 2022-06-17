@@ -30,6 +30,7 @@ jobs:
 
       - name: Installs all the Dependencies
         run: |
+          pip3 install -r requirements.txt
           python3 setup.py install
 
       - name: Checks the Application Build
