@@ -30,7 +30,7 @@ ipykernel==6.9.2
 ipython==8.1.1
 ipython-genutils==0.2.0
 jedi==0.18.0
-jupyter-client==7.1.2
+jupyter-client==7.3.4
 jupyter-core==4.7.1
 matplotlib-inline==0.1.2
 nest-asyncio==1.5.1
